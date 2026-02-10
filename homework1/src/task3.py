@@ -3,6 +3,8 @@
 #research how to calculate prime numbers). Create a while loop to find the sum of all numbers from
 #1 to 100. Write pytest test cases to verify the correctness of your code for each control structure.
 
+# Determining if given number is +, -, or 0
+print("\nPositive, Negative, or Zero?")
 number = float(input("Enter a number:"))
 
 if number > 0:
@@ -12,6 +14,9 @@ elif number < 0:
 elif number == 0:
     print(f"The number is zero")
 
+
+# Print first 10 prime numbers
+print("\nFirst 10 prime numbers:")
 counter = 0
 num = 1
 while counter < 10:
@@ -24,3 +29,13 @@ while counter < 10:
         print(num)
         counter += 1
     num += 1
+
+#Sum of number from 1-100
+print("\nSum of numbers from 1-100:")
+sum = 0
+rangeCount = 1
+while rangeCount < 101:
+    sum = sum + rangeCount
+    rangeCount += 1
+
+print(sum)
