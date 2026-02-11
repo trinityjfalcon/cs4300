@@ -11,3 +11,8 @@ def calculate_discount(price, discount):
     except TypeError:
         print("Error: Price and discount must be numeric types.")
         return None
+
+# Example
+if __name__ == "__main__":
+    print(calculate_discount(100, 20))
+    print(calculate_discount(49.99, 10))
