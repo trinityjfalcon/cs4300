@@ -13,9 +13,8 @@ def test_string():
     assert isinstance(task2.stringType, str)
 
 def test_boolean():
-    assert task2.boolType == True
+    assert task2.boolType is True
     assert isinstance(task2.boolType, bool)
 
 def test_boolean_negate():
-    assert task2.boolType == False
-    assert isinstance(task2.boolType, bool)
+    assert (not task2.boolType) is False
