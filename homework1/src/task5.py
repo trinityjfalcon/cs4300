@@ -8,10 +8,10 @@ print(bookList[0:3])
 
 # Dictionary
 studentDict = {
-    "Shoobert Magoo": 101
-    "Bobert McGee": 102
-    "Muffin Man": 103
-    "Jimbob Borito": 104
-    "Snoopy Dawg": 105
+    "Shoobert Magoo": 101,
+    "Bobert McGee": 102,
+    "Muffin Man": 103,
+    "Jimbob Borito": 104,
+    "Snoopy Dawg": 105,
     "Abo Rito": 106
 }
