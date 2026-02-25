@@ -15,11 +15,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from bookings.views import MovieViewSet, SeatViewSet, BookingViewSet
+
+# Router instance automatically generates standard CRUD endpoints
+router = DefaultRouter()
+
+# Using the router to register ViewSets creates end point
+# like "/api/movies/", "/api/bookings/", "/api/seat/"
+router.register(r'movies', MovieViewSet)
+router.register(r'seats', SeatViewSet)
+router.register(r'bookings', BookingViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # Login and logout view for browsable API
-    path('api-auth/', include('rest_framework.urls'))
+    path('api/', include(router.urls)),
 ]
