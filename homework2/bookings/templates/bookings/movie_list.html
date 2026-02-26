@@ -4,6 +4,32 @@
 
 {% block content %}
 
+<h2 class="mb-4">Available Movies</h2>
 
+<div class="row">
+    {% for movie in movies %}
+        <div class="col-md-4 mb-4">
+            <dic class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ movie.title}}</h5>
+
+                    <p class="card-text text-muted">
+                        {{ movie.description}}
+                    </p>
+
+                    <a href="{% url 'book_seat' movie.id %}" class="btn btn-primary">
+                        Book Now
+                    </a>
+                </div>
+            </dic>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                No movies available at the moment.
+            </div>
+        </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
