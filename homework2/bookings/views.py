@@ -23,7 +23,7 @@ class BookingViewSet(viewsets.ModelViewSet):
 # Views for templates
 def movie_list(request):
     movies = Movie.objects.all()
-    return render(request, "bookings/movie_list.html", {"movies": Movie})
+    return render(request, "bookings/movie_list.html", {"movies": movies})
 
 def book_seat(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)
