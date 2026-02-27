@@ -31,5 +31,9 @@ router.register(r'bookings', BookingViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    # API endpoints
     path('api/', include(router.urls)),
+
+    #HTML pages
+    path('', include('bookings.urls')),
 ]

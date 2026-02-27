@@ -1,0 +1,46 @@
+{% extends "bookings/base.html" %}
+
+{% block title %}Book a Seat{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Book a Seat for "{{ movie.title }}"</h2>
+
+<div class="row">
+    {% for seat in seats %}
+        <div class="col-md-3 col-sm-4 col-6 mb-3">
+            <div class="card text-center shadow-sm {% if seat.booking_status %} border-danger {% else %} border-success {% endif %}">
+                <div class="card-body">
+                    <h5 class="card-title">Seat {{ seat.seat_number }}</h5>
+
+                    {% if seat.is_booked %}
+                        <span class="badge bg-danger mb-2">Booked</span>
+                        <button class="btn btn-secondary btn-sm" disabled>
+                            Unavailable
+                        </button>
+                    {% else %}
+                        <span class="badge bg-success mb-2">Available</span>
+
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="seat_id" value="{{ seat.id }}">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                Book Now
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empyty %}
+        <div class="col-12">
+            <div class="alert alert-warning">
+                No seats available for this movie
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<a href="/" class="btn btn-outline-dark mt-4">Back to movies</a>
+
+{% endblock %}
