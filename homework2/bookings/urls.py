@@ -5,8 +5,9 @@ urlpatterns = [
     # Movie list page
     path('', views.movie_list, name='movie_list'),
 
-    # Booking history page
+    # Seat booking page
     path('book/<int:movie_id>/', views.book_seat, name='book_seat'),
 
-    # Seat booking page
+    # Booking history page
+    path('history/', views.booking_history, name='booking_history'),
 ]

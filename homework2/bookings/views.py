@@ -49,3 +49,7 @@ def book_seat(request, movie_id):
         return redirect("book_seat", movie_id=movie_id)
 
     return render(request, "bookings/seat_booking.html", {"movie": movie, "seats": seats})
+
+def booking_history(request):
+    bookings = Booking.objects.filter(user=request.user)
+    return render(request, "bookings/booking_history.html", {"bookings": bookings})
