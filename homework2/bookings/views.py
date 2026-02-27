@@ -27,7 +27,7 @@ def movie_list(request):
 
 def book_seat(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)
-    seats = Seat.objects.all()
+    seats = Seat.objects.filter(movie=movie)
 
     if request.method == "POST":
         seat_id = request.POST.get("seat_id")
