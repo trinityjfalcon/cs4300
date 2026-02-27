@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Seat {{ seat.seat_number }}</h5>
 
-                    {% if seat.is_booked %}
+                    {% if seat.booking_status == "Unavailable" %}
                         <span class="badge bg-danger mb-2">Booked</span>
                         <button class="btn btn-secondary btn-sm" disabled>
                             Unavailable
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-    {% empyty %}
+    {% empty %}
         <div class="col-12">
             <div class="alert alert-warning">
                 No seats available for this movie
