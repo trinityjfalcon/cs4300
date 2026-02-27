@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from bookings.views import MovieViewSet, SeatViewSet, BookingViewSet
+from django.contrib.auth import views as auth_views
 
 # Router instance automatically generates standard CRUD endpoints
 router = DefaultRouter()
