@@ -28,4 +28,4 @@ def movie_list(request):
 def book_seat(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)
     seats = Seat.objects.all()
-    return render(request, "bookings/seat_booking.html", {"movie": Movie, "seats": seats})
+    return render(request, "bookings/seat_booking.html", {"movie": movie, "seats": seats})
