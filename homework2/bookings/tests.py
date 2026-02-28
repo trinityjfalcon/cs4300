@@ -1,5 +1,7 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.contrib.auth.models import User
+from django.urls import reverse
+from rest_framework.test import APIClient
 from rest_framework import status
 from .models import Movie, Seat, Booking
 import datetime
@@ -10,7 +12,7 @@ class MovieModelTest(TestCase):
         self.movie = Movie.objects.create(
             title="Test Movie",
             description="A test description",
-            release_date=datetime.date(2024, 1, 1),
+            release_date=datetime.date(2026, 1, 1),
             duration=120
         )
 
@@ -28,7 +30,7 @@ class SeatModelTest(TestCase):
         self.movie = Movie.objects.create(
             title="Test Movie",
             description="A test description",
-            release_date=datetime.date(2024, 1, 1),
+            release_date=datetime.date(2026, 1, 1),
             duration=120
         )
         self.seat = Seat.objects.create(
@@ -58,7 +60,7 @@ class BookingModelTest(TestCase):
         self.movie = Movie.objects.create(
             title="Test Movie",
             description="A test description",
-            release_date=datetime.date(2024, 1, 1),
+            release_date=datetime.date(2026, 1, 1),
             duration=120
         )
         self.seat = Seat.objects.create(
@@ -78,3 +80,90 @@ class BookingModelTest(TestCase):
 
     def test_booking_date_auto_set(self):
         self.assertEqual(self.booking.booking_date, datetime.date.today())
+
+#Integration test for Movie
+class MovieAPITest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username="testuser", password="pass")
+        self.client.force_authetication(user=self.user)
+        self.movie = Movie.objects.create(
+            title="Test Movie (API)",
+            description="A test description (API)",
+            release_date=datetime.date(2026, 1, 1),
+            duration=120
+        )
+
+    def test_get_all_movies(self):
+        response = self.client.get("/api/movies/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_single_move(self):
+        response = self.client.get(f"/api/movies/{self.movie.id}/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["title"], "API Movie")
+
+    def test_create_movie(self):
+        data = {
+            "title": "New Movie",
+            "description": "New description",
+            "release_date": "2026-02-02",
+            "duration": 110.0
+        }
+
+        response = self.client.post("/api/movies/", data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Movie.objects.count(), 2)
+
+    def test_delete_movie(self):
+        response = self.client.delete(f"/api/movies/{self.movie.id}/")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Movie.objects.count(), 0)
+
+#Integration test for Seat
+class SeatAPITest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username="testuser", password="pass")
+        self.client.force_autheticate(user=self.user)
+        self.movie = Movie.objects.create(
+            title="Test Movie (API)",
+            description="Test description (API)",
+            release_date=datetime.date(2026, 1, 1),
+            duration=100
+        )
+
+        self.seat = Seat.objects.create(movie=self.movie, seat_num=1)
+    
+    def test_get_all_seats(self):
+        response = self.client.get("/api/seats")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_seat_default_available(self):
+        response = self.client.get(f"/api/seats/{self.seat.id}/")
+        self.assertEqual(response.data["booking_status"], "Available")
+
+#Integration test for Booking
+class BookingAPITest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username="testuser", password="pass")
+        self.client.force_authenticate(user=self.user)
+        self.movie = Movie.objects.create(
+            title="Test Movie (API)",
+            description="Test description (API)",
+            release_date=datetime.date(2026, 1, 1),
+            duration=100
+        )
+        self.seat = Seat.objects.create(movie=self.movie, seat_num=1)
+        self.booking = Booking.objects.create(
+            movie=self.movie, seat=self.seat, user=self.user
+        )
+
+    def test_get_all_bookings(self):
+        response = self.client.get("/api/bookings/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_booking_count(self):
+        response = self.client.get("/api/bookings/")
+        self.assertEqual(len(response.data), 1)
