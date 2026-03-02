@@ -25,7 +25,7 @@ class MovieModelTest(TestCase):
 
     def test_movie_str(self):
         # ensure is string is returned
-        self.assertIsInstance(str(sef.movie), str)
+        self.assertIsInstance(str(self.movie), str)
 
 # Unit test for Seat
 class SeatModelTest(TestCase):
@@ -52,7 +52,7 @@ class SeatModelTest(TestCase):
     def test_seat_default_status_is_available(self):
         # ensure default booking status is available
         seat = Seat.objects.create(movie=self.movie, seat_num=2)
-        self.assertEqual(self.booking_status, Seat.BookingStatus.AVAILABLE)
+        self.assertEqual(seat.booking_status, Seat.BookingStatus.AVAILABLE)
 
     def test_seat_can_be_marked_unavailable(self):
         # test updating booking status
@@ -76,7 +76,7 @@ class BookingModelTest(TestCase):
             seat_num=1
         )
         self.booking = Booking.objects.create(
-            movie=self.move,
+            movie=self.movie,
             seat=self.seat,
             user=self.user
         )
@@ -97,7 +97,7 @@ class MovieAPITest(TestCase):
         # authenticate API client
         self.client = APIClient()
         self.user = User.objects.create_user(username="testuser", password="pass")
-        self.client.force_authetication(user=self.user)
+        self.client.force_authenticate(user=self.user)
         
         # create initial movie
         self.movie = Movie.objects.create(
@@ -112,11 +112,11 @@ class MovieAPITest(TestCase):
         response = self.client.get("/api/movies/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_single_move(self):
+    def test_get_single_movie(self):
         #test retrieving specific movie by ID
         response = self.client.get(f"/api/movies/{self.movie.id}/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["title"], "API Movie")
+        self.assertEqual(response.data["title"], "Test Movie (API)")
 
     def test_create_movie(self):
         # test creating new movie via API
@@ -143,7 +143,7 @@ class SeatAPITest(TestCase):
         # authenticate user and create test seat
         self.client = APIClient()
         self.user = User.objects.create_user(username="testuser", password="pass")
-        self.client.force_autheticate(user=self.user)
+        self.client.force_authenticate(user=self.user)
         self.movie = Movie.objects.create(
             title="Test Movie (API)",
             description="Test description (API)",
@@ -155,7 +155,7 @@ class SeatAPITest(TestCase):
     
     def test_get_all_seats(self):
         # test retrieve seats
-        response = self.client.get("/api/seats")
+        response = self.client.get("/api/seats", follow=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_seat_default_available(self):
