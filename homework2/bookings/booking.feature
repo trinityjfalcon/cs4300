@@ -9,10 +9,9 @@ Feature: Movie Theater Booking
         And there is a movie with an available seat
         When I book the seat
         Then the seat should be marked as unavailable
-        And a booking should be created
-        And a booking displays in booking history page
+        Then a booking should be created
 
-    Scenario: User vies booking history
+    Scenario: User views booking history
         Given I am a logged in user
         And I have an existing booking
         When I visit the booking history page
