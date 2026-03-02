@@ -9,7 +9,7 @@ def step_homepage(context):
     context.client = Client()
     context.response = context.client.get('/')
 
-@then('I should see the movie list page')
+@then('I should see the list of movies page')
 def step_see_movie_list(context):
     assert context.response.status_code == 200
 
@@ -36,7 +36,7 @@ def step_available_seat(context):
 @when('I book the seat')
 def step_book_seat(context):
     context.response = context.client.post(
-        f'/book/{context.movie.id}',
+        f'/book/{context.movie.id}/',
         {'seat_id': context.seat.id}
     )
 
