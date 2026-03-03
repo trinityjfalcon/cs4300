@@ -7,7 +7,7 @@ from .models import Movie, Seat, Booking
 import datetime
 
 # Unit test for Movie
-# Creae a sample movie instance for tesing
+# Create a sample movie instance for tesing
 class MovieModelTest(TestCase):
     def setUp(self):
         self.movie = Movie.objects.create(
