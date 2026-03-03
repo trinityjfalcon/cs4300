@@ -57,5 +57,10 @@ def book_seat(request, movie_id):
     return render(request, "bookings/seat_booking.html", {"movie": movie, "seats": seats})
 
 def booking_history(request):
+
+    if not request.user.is_authenticated:
+            messages.error(request, "Log in to view booking history")
+            return redirect('login')
+
     bookings = Booking.objects.filter(user=request.user)
     return render(request, "bookings/booking_history.html", {"bookings": bookings})
