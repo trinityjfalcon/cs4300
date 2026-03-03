@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Movie, Seat, Booking
 from rest_framework import viewsets
 from .serializers import MovieSerializer, SeatSerializer, BookingSerializer
+from django.contrib import messages
 
 """
  ModelViewSet automatically provides list(), retrieve(), create(), update(),
@@ -30,6 +31,11 @@ def book_seat(request, movie_id):
     seats = Seat.objects.filter(movie=movie)
 
     if request.method == "POST":
+        # if user is not logged and and clicks book now, give error message
+        if not request.user.is_authenticated:
+            messages.error(request, "You must be logged in to book a seat.")
+            return redirect('login')
+
         seat_id = request.POST.get("seat_id")
         seat = get_object_or_404(Seat, id=seat_id)
 
